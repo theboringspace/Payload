@@ -18,6 +18,13 @@ void GameClock::ConsumeStep()
     accumulator_ -= FIXED_DT;
 }
 
+// TEST
+float GameClock::GetTimeScale()const
+{
+    return scale_;
+}
+
+
 float GameClock::GameTime()const
 {
     return game_;

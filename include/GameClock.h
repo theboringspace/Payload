@@ -10,6 +10,9 @@ public:
     bool  ShouldStep()const;
     void  ConsumeStep();
 
+    // TEST
+    float GetTimeScale()const;
+
     static constexpr float FIXED_DT{ 1.0f / 60.0f};
 
 private:

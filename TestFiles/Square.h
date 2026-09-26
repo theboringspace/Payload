@@ -1,5 +1,6 @@
 #pragma once
 #include <raylib.h>
+#include <cmath>
 
 struct Square
 {
@@ -11,6 +12,15 @@ struct Square
     {
         pos_.x += vel_.x * gameTime;
         pos_.y += vel_.y * gameTime;
+
+        if (pos_.x + side_ >= 1920)
+        {
+            vel_.x = -std::abs(vel_.x);
+        }
+        else if (pos_.x <= 0)
+        {
+            vel_.x = std::abs(vel_.x);
+        }
     }
 
     Square(float side, Vector2 pos, Vector2 vel)
