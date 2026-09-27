@@ -2,11 +2,11 @@
 
 void SceneManager::Push(std::unique_ptr<Scene> scene)
 {
-    pending_.push_back({PendingOperation(SceneOperation::PUSH, std::move(scene))});
+    pendingQueue_.push_back(PendingOperation(SceneOperation::PUSH, std::move(scene)));
 }
 void SceneManager::Pop()
 {
-    pending_.push_back(PendingOperation(SceneOperation::POP, nullptr));
+    pendingQueue_.push_back(PendingOperation(SceneOperation::POP, nullptr));
 }
 void SceneManager::Replace(std::unique_ptr<Scene> scene)
 {
@@ -14,7 +14,7 @@ void SceneManager::Replace(std::unique_ptr<Scene> scene)
     {
         Push(std::move(scene));
     }
-    pending_.push_back(PendingOperation(SceneOperation::REPLACE, std::move(scene)));
+    pendingQueue_.push_back(PendingOperation(SceneOperation::REPLACE, std::move(scene)));
 }
 void SceneManager::Update(float deltaTime)
 {
@@ -30,8 +30,14 @@ void SceneManager::Update(float deltaTime)
 }
 void SceneManager::Draw()
 {
-    sceneStack_.back()->Draw();
+    size_t springIndex{sceneStack_.size()};;
 
+    for (; sceneStack_[springIndex]->IsTransparent() && springIndex-- > 0;){}
+
+    for (size_t springBack{springIndex}; springBack != sceneStack_.size(); ++springBack)
+    {
+        sceneStack_[springBack]->Draw();
+    }
 }
 void SceneManager::ApplyPending()
 {
