@@ -41,6 +41,8 @@ int main()
         EndDrawing();
     }
 
+    scene->OnExit();
+    scene.reset();
     CloseWindow();
 
     return EXIT_SUCCESS;
