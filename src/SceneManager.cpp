@@ -18,7 +18,8 @@ void SceneManager::Replace(std::unique_ptr<Scene> scene)
 }
 void SceneManager::Update(float deltaTime)
 {
-    for (size_t index{sceneStack_.size()}; index-- > 0;)
+    for (size_t
+        index{sceneStack_.size()}; index-- > 0;)
     {
         sceneStack_[index]->Update(deltaTime);
 
@@ -41,7 +42,42 @@ void SceneManager::Draw()
 }
 void SceneManager::ApplyPending()
 {
+    while (!pendingQueue_.empty())
+    {
+        switch(pendingQueue_.back().operation)
+        {
+            case SceneOperation::PUSH :
+                if (!sceneStack_.empty())
+                {
+                    sceneStack_.back()->OnPause();
+                }
 
+                sceneStack_.push_back(std::move(pendingQueue_.back().scene));
+                sceneStack_.back()->OnEnter();
+
+                break;
+            case SceneOperation::POP :
+                if (sceneStack_.empty())
+                {
+                    continue;
+                }
+
+                sceneStack_.pop_back();
+                sceneStack_.back()->OnEnter();
+
+                break;
+            case SceneOperation::REPLACE :
+                sceneStack_.back()->OnExit();
+                sceneStack_.pop_back();
+
+                sceneStack_.push_back(std::move(pendingQueue_.back().scene));
+                sceneStack_.back()->OnEnter();
+
+                break;
+        }
+
+        pendingQueue_.pop_back();
+    }
 }
 bool SceneManager::Empty() const
 {
