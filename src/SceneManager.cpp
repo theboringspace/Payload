@@ -10,10 +10,6 @@ void SceneManager::Pop()
 }
 void SceneManager::Replace(std::unique_ptr<Scene> scene)
 {
-    if (sceneStack_.empty())
-    {
-        Push(std::move(scene));
-    }
     pendingQueue_.push_back(PendingOperation(SceneOperation::REPLACE, std::move(scene)));
 }
 void SceneManager::Update(float deltaTime)
@@ -31,20 +27,26 @@ void SceneManager::Update(float deltaTime)
 }
 void SceneManager::Draw()
 {
-    size_t springIndex{sceneStack_.size()};;
+    if (sceneStack_.empty()) return;
 
-    for (; sceneStack_[springIndex]->IsTransparent() && springIndex-- > 0;){}
+    size_t lowestVisible{sceneStack_.size() - 1};
 
-    for (size_t springBack{springIndex}; springBack != sceneStack_.size(); ++springBack)
+    while(lowestVisible > 0 && sceneStack_[lowestVisible]->IsTransparent())
     {
-        sceneStack_[springBack]->Draw();
+        --lowestVisible;
+    }
+
+    for (size_t index{lowestVisible}; index < sceneStack_.size(); ++index)
+    {
+        sceneStack_[index]->Draw();
     }
 }
 void SceneManager::ApplyPending()
 {
-    while (!pendingQueue_.empty())
+    // Do all queued Scene Operations
+    for (auto& sceneOp : pendingQueue_)
     {
-        switch(pendingQueue_.back().operation)
+        switch(sceneOp.operation)
         {
             case SceneOperation::PUSH :
                 if (!sceneStack_.empty())
@@ -52,7 +54,7 @@ void SceneManager::ApplyPending()
                     sceneStack_.back()->OnPause();
                 }
 
-                sceneStack_.push_back(std::move(pendingQueue_.back().scene));
+                sceneStack_.push_back(std::move(sceneOp.scene));
                 sceneStack_.back()->OnEnter();
 
                 break;
@@ -62,22 +64,29 @@ void SceneManager::ApplyPending()
                     continue;
                 }
 
+                sceneStack_.back()->OnExit();
                 sceneStack_.pop_back();
-                sceneStack_.back()->OnEnter();
+                if (!sceneStack_.empty())
+                {
+                    sceneStack_.back()->OnResume();
+                }
 
                 break;
             case SceneOperation::REPLACE :
-                sceneStack_.back()->OnExit();
-                sceneStack_.pop_back();
+                if (!sceneStack_.empty())
+                {
+                    sceneStack_.back()->OnExit();
+                    sceneStack_.pop_back();
+                }
 
-                sceneStack_.push_back(std::move(pendingQueue_.back().scene));
+                sceneStack_.push_back(std::move(sceneOp.scene));
                 sceneStack_.back()->OnEnter();
 
                 break;
         }
-
-        pendingQueue_.pop_back();
     }
+
+    pendingQueue_.clear();
 }
 bool SceneManager::Empty() const
 {

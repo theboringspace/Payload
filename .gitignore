@@ -74,3 +74,6 @@ __cmake_systeminformation/
 # Editor tasks
 .zed
 .vscode
+
+# Diagrams
+docs/
