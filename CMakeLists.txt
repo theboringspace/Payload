@@ -44,10 +44,24 @@ file(GLOB_RECURSE PAYLOAD_SOURCES CONFIGURE_DEPENDS
 
 add_executable(${PROJECT_NAME} ${PAYLOAD_SOURCES})
 
-target_include_directories(${PROJECT_NAME} PRIVATE
+# Every folder containing a header is an include path, so both "Scene.h" and
+# "Scenes/Scene.h" resolve. New subfolders (e.g. include/UI) are picked up automatically.
+file(GLOB_RECURSE PAYLOAD_HEADERS CONFIGURE_DEPENDS
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/TestFiles/*.h"
+)
+
+set(PAYLOAD_INCLUDE_DIRS
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
     "${CMAKE_CURRENT_SOURCE_DIR}/TestFiles"
 )
+foreach(header IN LISTS PAYLOAD_HEADERS)
+    get_filename_component(header_dir "${header}" DIRECTORY)
+    list(APPEND PAYLOAD_INCLUDE_DIRS "${header_dir}")
+endforeach()
+list(REMOVE_DUPLICATES PAYLOAD_INCLUDE_DIRS)
+
+target_include_directories(${PROJECT_NAME} PRIVATE ${PAYLOAD_INCLUDE_DIRS})
 
 target_link_libraries(${PROJECT_NAME} PRIVATE raylib)
 
