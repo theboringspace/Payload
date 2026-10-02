@@ -39,12 +39,13 @@ endif()
 # ---------------------------------------------------------------------------
 file(GLOB_RECURSE PAYLOAD_SOURCES CONFIGURE_DEPENDS
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/TestFiles/*.cpp"
 )
 
 add_executable(${PROJECT_NAME} ${PAYLOAD_SOURCES})
 
 target_include_directories(${PROJECT_NAME} PRIVATE
-    "${CMAKE_CURRENT_SOURCE_DIR}/include",
+    "${CMAKE_CURRENT_SOURCE_DIR}/include"
     "${CMAKE_CURRENT_SOURCE_DIR}/TestFiles"
 )
 

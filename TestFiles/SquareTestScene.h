@@ -1,7 +1,10 @@
+#pragma once
+
 #include "Scene.h"
 
 class SquareTestScene : public Scene
 {
+public:
     virtual ~SquareTestScene() = default;
 
     void OnEnter() override;
