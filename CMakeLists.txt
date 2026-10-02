@@ -39,7 +39,6 @@ endif()
 # ---------------------------------------------------------------------------
 file(GLOB_RECURSE PAYLOAD_SOURCES CONFIGURE_DEPENDS
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/TestFiles/*.cpp"
 )
 
 add_executable(${PROJECT_NAME} ${PAYLOAD_SOURCES})
@@ -48,12 +47,10 @@ add_executable(${PROJECT_NAME} ${PAYLOAD_SOURCES})
 # "Scenes/Scene.h" resolve. New subfolders (e.g. include/UI) are picked up automatically.
 file(GLOB_RECURSE PAYLOAD_HEADERS CONFIGURE_DEPENDS
     "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/TestFiles/*.h"
 )
 
 set(PAYLOAD_INCLUDE_DIRS
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
-    "${CMAKE_CURRENT_SOURCE_DIR}/TestFiles"
 )
 foreach(header IN LISTS PAYLOAD_HEADERS)
     get_filename_component(header_dir "${header}" DIRECTORY)
@@ -91,3 +88,14 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         "$<TARGET_FILE_DIR:${PROJECT_NAME}>/assets"
     COMMENT "Copying assets"
 )
+
+
+# ---------------------------------------------------------------------------
+# Sandbox Executable
+# ---------------------------------------------------------------------------
+# Sandbox: all game code except the real main.cpp, plus TestFiles/
+list(FILTER PAYLOAD_SOURCES EXCLUDE REGEX "/main\\.cpp$")
+file(GLOB_RECURSE SANDBOX_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/TestFiles/*.cpp")
+add_executable(Sandbox ${PAYLOAD_SOURCES} ${SANDBOX_SOURCES})
+target_include_directories(Sandbox PRIVATE ${PAYLOAD_INCLUDE_DIRS})
+target_link_libraries(Sandbox PRIVATE raylib)
