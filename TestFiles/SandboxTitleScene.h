@@ -2,15 +2,14 @@
 
 #include "SceneManager.h"
 #include "Scene.h"
-
 #include "Button.h"
 
-class SquareTestScene : public Scene
+class SandboxTitleScene : public Scene
 {
 public:
-    SquareTestScene(SceneManager& manager_);
+    SandboxTitleScene(SceneManager& manager_);
 
-    virtual ~SquareTestScene() = default;
+    virtual ~SandboxTitleScene() = default;
 
     void OnEnter() override;
     void OnExit() override;
@@ -26,5 +25,5 @@ public:
 private:
     SceneManager& manager;
 
-    Button backButton;
+    Button startButton;
 };
