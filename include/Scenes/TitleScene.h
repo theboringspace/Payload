@@ -1,0 +1,21 @@
+#pragma once
+
+#include <raylib.h>
+#include "Scene.h"
+
+class TitleScene : public Scene
+{
+public:
+    virtual ~TitleScene() = default;
+
+    void OnEnter() override;
+    void OnExit() override;
+    void OnPause() override;
+    void OnResume() override;
+
+    void Update(float deltaTime) override;
+    void Draw() override;
+
+    bool IsTransparent()const override;
+    bool BlocksUpdate()const override;
+};
