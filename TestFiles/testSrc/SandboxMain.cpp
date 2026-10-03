@@ -23,9 +23,14 @@ int main()
     EventBus events;
     TestPlayer player(events);
     int shownHealth{ 100 };
+    int shownKills{ 0 };
     events.Subscribe<PlayerDamaged>([&shownHealth](const PlayerDamaged& event)
         {
             shownHealth = event.health;
+        });
+    events.Subscribe<PlayerKills>([&shownKills](const PlayerKills& event)
+        {
+            shownKills = event.kills;
         });
 
     SceneManager scenes;
@@ -43,7 +48,11 @@ int main()
         // Input
         if (IsKeyPressed(KEY_H))
         {
-            player.TakeDamage(10);
+            player.TakeDamage(5);
+        }
+        if (IsKeyPressed(KEY_K))
+        {
+            player.Kill();
         }
 
         // Update
@@ -55,6 +64,8 @@ int main()
             clock.ConsumeStep();
         }
 
+        events.Dispatch();
+
 
         // Draw
         BeginDrawing();
@@ -62,6 +73,8 @@ int main()
         scenes.Draw();
 
         DrawText(TextFormat("Health: %d", shownHealth), 500, 400, 40, WHITE);
+        DrawText(TextFormat("Kills:  %d", shownKills ), 500, 350, 40, WHITE);
+
 
         EndDrawing();
 

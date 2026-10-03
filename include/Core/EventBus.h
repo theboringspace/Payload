@@ -41,7 +41,26 @@ public:
         }
     }
 
+    template <typename E>
+    void Enqueue(E event)
+    {
+        queue.push_back([this, event](){ Publish(event); });
+    }
+
+    void Dispatch()
+    {
+        std::vector<std::function<void()>> queueLocal{ std::move(queue) };
+        queue.clear();
+
+        for (auto& event : queueLocal)
+        {
+            event();
+        }
+    }
+
 private:
     using ErasedHandler = std::function<void(const void*)>;
     std::unordered_map<std::type_index, std::vector<ErasedHandler>> handlers;
+
+    std::vector<std::function<void()>> queue;
 };
