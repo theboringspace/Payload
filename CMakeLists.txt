@@ -95,7 +95,8 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 # ---------------------------------------------------------------------------
 # Sandbox: all game code except the real main.cpp, plus TestFiles/
 list(FILTER PAYLOAD_SOURCES EXCLUDE REGEX "/main\\.cpp$")
-file(GLOB_RECURSE SANDBOX_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/TestFiles/*.cpp")
+file(GLOB_RECURSE SANDBOX_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/TestFiles/testSrc/*.cpp")
 add_executable(Sandbox ${PAYLOAD_SOURCES} ${SANDBOX_SOURCES})
 target_include_directories(Sandbox PRIVATE ${PAYLOAD_INCLUDE_DIRS})
+target_include_directories(Sandbox PRIVATE testFiles/testInclude)
 target_link_libraries(Sandbox PRIVATE raylib)
