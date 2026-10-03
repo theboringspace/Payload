@@ -1,4 +1,10 @@
 #include "GameClock.h"
+#include "Events.h"
+
+GameClock::GameClock(EventBus& events_)
+:   events(events_)
+{
+}
 
 void GameClock::Advance(float realDt)
 {
@@ -38,4 +44,5 @@ float GameClock::RealTime()const
 void GameClock::SetTimeScale(float scale)
 {
     scale_ = scale;
+    events.Enqueue(TimeScaleChanged{ scale });
 }

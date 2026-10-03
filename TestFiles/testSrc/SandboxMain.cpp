@@ -5,7 +5,6 @@
 
 #include "SceneManager.h"
 #include "SandboxTitleScene.h"
-#include "SquareTestScene.h"
 
 #include "GameClock.h"
 
@@ -16,26 +15,35 @@
 int main()
 {
     InitWindow(1920, 1080, "Payload Sandbox");
-    SetTargetFPS(60);
-
-    GameClock clock;
+    int targetFPS{ 60 };
+    SetTargetFPS(targetFPS);
 
     EventBus events;
-    TestPlayer player(events);
-    int shownHealth{ 100 };
-    int shownKills{ 0 };
-    events.Subscribe<PlayerDamaged>([&shownHealth](const PlayerDamaged& event)
-        {
-            shownHealth = event.health;
-        });
-    events.Subscribe<PlayerKills>([&shownKills](const PlayerKills& event)
-        {
-            shownKills = event.kills;
-        });
-
+    GameClock clock(events);
     SceneManager scenes;
-    scenes.Push(std::make_unique<SandboxTitleScene>(scenes));
+    scenes.Push(std::make_unique<SandboxTitleScene>(events, scenes));
     scenes.ApplyPending();
+
+    // Subscriptions
+    events.Subscribe<IncreaseFPS>([&targetFPS](const IncreaseFPS& event)
+        {
+            targetFPS += event.increase;
+            SetTargetFPS(targetFPS);
+        });
+    events.Subscribe<DecreaseFPS>([&targetFPS](const DecreaseFPS& event)
+        {
+            targetFPS -= event.decrease;
+            SetTargetFPS(targetFPS);
+        });
+    events.Subscribe<IncreaseTimeScale>([&clock](const IncreaseTimeScale& event)
+        {
+            clock.SetTimeScale(clock.GetTimeScale() + event.increase);
+        });
+    events.Subscribe<DecreaseTimeScale>([&clock](const DecreaseTimeScale& event)
+        {
+            clock.SetTimeScale(clock.GetTimeScale() - event.decrease);
+
+        });
 
     while (!WindowShouldClose() && !scenes.Empty())
     {
@@ -43,17 +51,8 @@ int main()
         float dt{ GetFrameTime() };
         dt = std::min(dt, 0.25f);
 
-
-
         // Input
-        if (IsKeyPressed(KEY_H))
-        {
-            player.TakeDamage(5);
-        }
-        if (IsKeyPressed(KEY_K))
-        {
-            player.Kill();
-        }
+
 
         // Update
         clock.Advance(dt);
@@ -64,6 +63,7 @@ int main()
             clock.ConsumeStep();
         }
 
+        // Dispatch all queued Events
         events.Dispatch();
 
 
@@ -71,10 +71,6 @@ int main()
         BeginDrawing();
 
         scenes.Draw();
-
-        DrawText(TextFormat("Health: %d", shownHealth), 500, 400, 40, WHITE);
-        DrawText(TextFormat("Kills:  %d", shownKills ), 500, 350, 40, WHITE);
-
 
         EndDrawing();
 

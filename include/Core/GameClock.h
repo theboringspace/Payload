@@ -19,9 +19,13 @@
  *
  * This assumes time in seconds btw.
  */
+#include "EventBus.h"
+
 class GameClock
 {
 public:
+    GameClock(EventBus& events_);
+
     /**
      * FUNCTION Advance
      * --
@@ -70,6 +74,7 @@ public:
     static constexpr float FIXED_DT{ 1.0f / 60.0f};
 
 private:
+    EventBus& events;
 
     float real_         { 0.0 }; ///< Real seconds elapsed.
     float game_         { 0.0 }; ///< Scaled seconds elapsed.

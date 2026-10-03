@@ -17,3 +17,26 @@ struct WaveStarted
 };
 
 // Test Events
+
+// Time Adjustment Events
+struct IncreaseFPS
+{
+    int increase{};
+};
+struct DecreaseFPS
+{
+    int decrease{};
+};
+struct IncreaseTimeScale
+{
+    float increase{};
+};
+struct DecreaseTimeScale
+{
+    float decrease{};
+};
+
+struct TimeScaleChanged
+{
+    float newTimeScale;
+};

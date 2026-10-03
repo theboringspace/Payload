@@ -1,13 +1,16 @@
 #pragma once
 
+#include "EventBus.h"
+
 #include "SceneManager.h"
 #include "Scene.h"
+
 #include "Button.h"
 
 class SandboxTitleScene : public Scene
 {
 public:
-    SandboxTitleScene(SceneManager& manager_);
+    SandboxTitleScene(EventBus& events_, SceneManager& manager_);
 
     virtual ~SandboxTitleScene() = default;
 
@@ -23,7 +26,5 @@ public:
     bool BlocksUpdate()const override;
 
 private:
-    SceneManager& manager;
-
     Button startButton;
 };

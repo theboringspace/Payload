@@ -1,8 +1,14 @@
 #pragma once
 
+#include "EventBus.h"
+
+class SceneManager;
+
 class Scene
 {
 public:
+    Scene(EventBus& events_, SceneManager& manager_);
+
     /// Scene objects are always derived, hence it must always have a virtual destructor.
     virtual ~Scene() = default;
 
@@ -24,4 +30,8 @@ public:
     virtual bool IsTransparent()const;
     /// Scenes below aren't updated.
     virtual bool BlocksUpdate()const;
+
+protected:
+    EventBus&       events;
+    SceneManager&   manager;
 };

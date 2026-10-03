@@ -4,7 +4,7 @@
 #include "Events.h"
 
 struct PlayerDamaged { int health; };
-struct PlayerKills   { int kills; };
+struct PlayerKills   { int kills;  };
 
 class TestPlayer
 {

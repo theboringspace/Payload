@@ -1,16 +1,18 @@
 #pragma once
 
+#include "EventBus.h"
+
 #include "SceneManager.h"
 #include "Scene.h"
 
 #include "Button.h"
 
-class SquareTestScene : public Scene
+class SceneDemoScene : public Scene
 {
 public:
-    SquareTestScene(SceneManager& manager_);
+    SceneDemoScene(EventBus& events_, SceneManager& manager_);
 
-    virtual ~SquareTestScene() = default;
+    virtual ~SceneDemoScene() = default;
 
     void OnEnter() override;
     void OnExit() override;
@@ -24,7 +26,5 @@ public:
     bool BlocksUpdate()const override;
 
 private:
-    SceneManager& manager;
-
     Button backButton;
 };

@@ -1,8 +1,8 @@
 #pragma once
+
 #include <raylib.h>
 #include <memory>
 #include <vector>
-
 #include "Scene.h"
 
 enum class SceneOperation { PUSH, POP, REPLACE };
