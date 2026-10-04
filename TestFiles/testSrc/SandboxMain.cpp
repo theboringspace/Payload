@@ -35,14 +35,10 @@ int main()
             targetFPS -= event.decrease;
             SetTargetFPS(targetFPS);
         });
-    events.Subscribe<IncreaseTimeScale>([&clock](const IncreaseTimeScale& event)
+    events.Subscribe<ResetFPS>([&targetFPS](const ResetFPS& event)
         {
-            clock.SetTimeScale(clock.GetTimeScale() + event.increase);
-        });
-    events.Subscribe<DecreaseTimeScale>([&clock](const DecreaseTimeScale& event)
-        {
-            clock.SetTimeScale(clock.GetTimeScale() - event.decrease);
-
+            targetFPS = event.fps;
+            SetTargetFPS(targetFPS);
         });
 
     while (!WindowShouldClose() && !scenes.Empty())

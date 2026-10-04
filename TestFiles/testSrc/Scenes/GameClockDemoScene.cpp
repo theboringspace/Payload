@@ -25,6 +25,8 @@ void GameClockDemoScene::OnEnter()
 }
 void GameClockDemoScene::OnExit()
 {
+    events.Enqueue(ResetTimeScale{ 1.0f });
+    events.Enqueue(ResetFPS{ 60 });
 }
 void GameClockDemoScene::OnPause()
 {
