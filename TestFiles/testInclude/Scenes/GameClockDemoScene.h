@@ -10,6 +10,8 @@
 
 #include "Square.h"
 
+class EventSubscription;
+
 class GameClockDemoScene : public Scene
 {
 public:
@@ -39,4 +41,7 @@ private:
     Button decreaseFPSButton;
 
     Square square{ 200, {WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f - 100}, {100, 0}};
+
+    // Events
+    EventSubscription timeScaleChanged;
 };

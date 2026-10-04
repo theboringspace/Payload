@@ -4,13 +4,14 @@
 #include <unordered_map>
 #include <cstddef>
 #include <utility>
+#include "EventSubscription.h"
 
 /// Centralized, type-based Subscribe/Publish Event Bus with queued dispatch.
 class EventBus
 {
 public:
     template <typename E>
-    void Subscribe(std::function<void(const E&)> handler) ///< Add to the Map
+    [[nodiscard]] EventSubscription Subscribe(std::function<void(const E&)> handler) ///< Add to the Map
     {
         // Build a function that will run LATER, when E is published.
         ErasedHandler wrapper = [handler](const void* event)
@@ -21,7 +22,13 @@ public:
 
         // Store the built function into E's list to be published later.
         handlers[std::type_index(typeid(E))].push_back({ nextId, wrapper });
+
+        size_t id{ nextId };
+        std::type_index type{ std::type_index(typeid(E)) };
+
         ++nextId;
+
+        return EventSubscription(this, type, id);
     }
 
     void Unsubscribe(std::type_index eventType, size_t eventId) ///< Remove Handler by ID

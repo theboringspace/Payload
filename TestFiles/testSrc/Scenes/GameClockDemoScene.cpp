@@ -1,7 +1,6 @@
 #include "GameClockDemoScene.h"
 #include "Constants.h"
 #include "SceneSelectionScene.h"
-
 #include "Events.h"
 
 #include <raylib.h>
@@ -14,14 +13,15 @@ GameClockDemoScene::GameClockDemoScene(EventBus& events_, SceneManager& manager_
     increaseFPSButton(WINDOW_WIDTH / 2.0f + 10, WINDOW_HEIGHT - 245, 400, 75, "Increase FPS", 30),
     decreaseFPSButton(WINDOW_WIDTH / 2.0f - 410, WINDOW_HEIGHT - 245, 400, 75, "Decrease FPS", 30)
 {
-    events_.Subscribe<TimeScaleChanged>([this](const TimeScaleChanged& event)
-        {
-            shownTimeScale = event.newTimeScale;
-        });
+
 }
 
 void GameClockDemoScene::OnEnter()
 {
+    timeScaleChanged = events.Subscribe<TimeScaleChanged>([this](const TimeScaleChanged& event)
+        {
+            shownTimeScale = event.newTimeScale;
+        });
 }
 void GameClockDemoScene::OnExit()
 {
@@ -61,8 +61,6 @@ void GameClockDemoScene::HandleInput()
 void GameClockDemoScene::Update(float deltaTime)
 {
     square.Update(deltaTime);
-
-
 }
 void GameClockDemoScene::Draw()
 {

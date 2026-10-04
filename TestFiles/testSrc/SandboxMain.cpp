@@ -3,6 +3,7 @@
 #include <memory>
 #include <iostream>
 
+#include "EventSubscription.h"
 #include "SceneManager.h"
 #include "SandboxTitleScene.h"
 
@@ -25,17 +26,17 @@ int main()
     scenes.ApplyPending();
 
     // Subscriptions
-    events.Subscribe<IncreaseFPS>([&targetFPS](const IncreaseFPS& event)
+    EventSubscription increaseFPSSub = events.Subscribe<IncreaseFPS>([&targetFPS](const IncreaseFPS& event)
         {
             targetFPS += event.increase;
             SetTargetFPS(targetFPS);
         });
-    events.Subscribe<DecreaseFPS>([&targetFPS](const DecreaseFPS& event)
+    EventSubscription decreaseFpsSub = events.Subscribe<DecreaseFPS>([&targetFPS](const DecreaseFPS& event)
         {
             targetFPS -= event.decrease;
             SetTargetFPS(targetFPS);
         });
-    events.Subscribe<ResetFPS>([&targetFPS](const ResetFPS& event)
+    EventSubscription resetFPSSub = events.Subscribe<ResetFPS>([&targetFPS](const ResetFPS& event)
         {
             targetFPS = event.fps;
             SetTargetFPS(targetFPS);
