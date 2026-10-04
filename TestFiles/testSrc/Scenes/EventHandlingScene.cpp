@@ -23,12 +23,16 @@ void EventHandlingScene::OnResume()
 {
 }
 
-void EventHandlingScene::Update(float deltaTime)
+void EventHandlingScene::HandleInput()
 {
     if (backButton.isClicked())
     {
         manager.Replace(std::make_unique<SceneSelectionScene>(events, manager));
     }
+}
+void EventHandlingScene::Update(float deltaTime)
+{
+
 }
 void EventHandlingScene::Draw()
 {

@@ -1,8 +1,8 @@
 #pragma once
+
 #include <raylib.h>
 #include <memory>
 #include <vector>
-
 #include "Scene.h"
 
 enum class SceneOperation { PUSH, POP, REPLACE };
@@ -37,6 +37,12 @@ public:
      * in ApplyPending().
      */
     void Replace(std::unique_ptr<Scene> scene);
+    /**
+     * FUNCTION HandleInput
+     * --
+     * Passes input handling to the top scene on sceneStack_ only.
+     */
+    void HandleInput();
     /**
      * FUNCTION Update
      * --

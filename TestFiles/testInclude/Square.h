@@ -1,4 +1,6 @@
 #pragma once
+
+#include "Constants.h"
 #include <raylib.h>
 #include <cmath>
 
@@ -13,7 +15,7 @@ struct Square
         pos_.x += vel_.x * gameTime;
         pos_.y += vel_.y * gameTime;
 
-        if (pos_.x + side_ >= 1920)
+        if (pos_.x + side_ >= WINDOW_WIDTH)
         {
             vel_.x = -std::abs(vel_.x);
         }

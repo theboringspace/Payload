@@ -1,3 +1,4 @@
+#pragma once
 
 // GLOBAL WINDOW CONSTANTS
 inline constexpr int WINDOW_WIDTH = 1920;

@@ -1,12 +1,18 @@
 #pragma once
 
-#include <raylib.h>
+#include "EventBus.h"
+
+#include "SceneManager.h"
 #include "Scene.h"
 
-class TitleScene : public Scene
+#include "Button.h"
+
+class SceneDemoScene : public Scene
 {
 public:
-    virtual ~TitleScene() = default;
+    SceneDemoScene(EventBus& events_, SceneManager& manager_);
+
+    virtual ~SceneDemoScene() = default;
 
     void OnEnter() override;
     void OnExit() override;
@@ -19,4 +25,7 @@ public:
 
     bool IsTransparent()const override;
     bool BlocksUpdate()const override;
+
+private:
+    Button backButton;
 };

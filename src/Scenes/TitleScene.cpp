@@ -22,6 +22,9 @@ void TitleScene::OnResume()
 
 }
 
+void TitleScene::HandleInput()
+{
+}
 void TitleScene::Update(float deltaTime)
 {
 

@@ -98,5 +98,20 @@ list(FILTER PAYLOAD_SOURCES EXCLUDE REGEX "/main\\.cpp$")
 file(GLOB_RECURSE SANDBOX_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/TestFiles/testSrc/*.cpp")
 add_executable(Sandbox ${PAYLOAD_SOURCES} ${SANDBOX_SOURCES})
 target_include_directories(Sandbox PRIVATE ${PAYLOAD_INCLUDE_DIRS})
-target_include_directories(Sandbox PRIVATE testFiles/testInclude)
+
+# Same as the game target: every folder under testInclude/ containing a header is an include path.
+file(GLOB_RECURSE SANDBOX_HEADERS CONFIGURE_DEPENDS
+    "${CMAKE_CURRENT_SOURCE_DIR}/TestFiles/testInclude/*.h"
+)
+
+set(SANDBOX_INCLUDE_DIRS
+    "${CMAKE_CURRENT_SOURCE_DIR}/TestFiles/testInclude"
+)
+foreach(header IN LISTS SANDBOX_HEADERS)
+    get_filename_component(header_dir "${header}" DIRECTORY)
+    list(APPEND SANDBOX_INCLUDE_DIRS "${header_dir}")
+endforeach()
+list(REMOVE_DUPLICATES SANDBOX_INCLUDE_DIRS)
+
+target_include_directories(Sandbox PRIVATE ${SANDBOX_INCLUDE_DIRS})
 target_link_libraries(Sandbox PRIVATE raylib)

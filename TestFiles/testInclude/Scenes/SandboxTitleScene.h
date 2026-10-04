@@ -1,22 +1,25 @@
 #pragma once
 
+#include "EventBus.h"
+
 #include "SceneManager.h"
 #include "Scene.h"
 
 #include "Button.h"
 
-class SquareTestScene : public Scene
+class SandboxTitleScene : public Scene
 {
 public:
-    SquareTestScene(SceneManager& manager_);
+    SandboxTitleScene(EventBus& events_, SceneManager& manager_);
 
-    virtual ~SquareTestScene() = default;
+    virtual ~SandboxTitleScene() = default;
 
     void OnEnter() override;
     void OnExit() override;
     void OnPause() override;
     void OnResume() override;
 
+    void HandleInput() override;
     void Update(float deltaTime) override;
     void Draw() override;
 
@@ -24,7 +27,5 @@ public:
     bool BlocksUpdate()const override;
 
 private:
-    SceneManager& manager;
-
-    Button backButton;
+    Button startButton;
 };

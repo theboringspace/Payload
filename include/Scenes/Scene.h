@@ -1,8 +1,14 @@
 #pragma once
 
+#include "EventBus.h"
+
+class SceneManager;
+
 class Scene
 {
 public:
+    Scene(EventBus& events_, SceneManager& manager_);
+
     /// Scene objects are always derived, hence it must always have a virtual destructor.
     virtual ~Scene() = default;
 
@@ -15,6 +21,8 @@ public:
     /// Called when it is on top again,. Unpause music, disable update, etc...
     virtual void OnResume();
 
+    // Handle inputs INSTANTLY, not on a fixed time.
+    virtual void HandleInput() = 0;
     /// Update everything that's supposed to update in the scene
     virtual void Update(float deltaTime) = 0;
     /// Draw everything that's supposed to be drawain in the scene
@@ -24,4 +32,8 @@ public:
     virtual bool IsTransparent()const;
     /// Scenes below aren't updated.
     virtual bool BlocksUpdate()const;
+
+protected:
+    EventBus&       events;
+    SceneManager&   manager;
 };

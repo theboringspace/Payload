@@ -1,5 +1,7 @@
 #include "Scene.h"
 
+Scene::Scene(EventBus& events_, SceneManager& manager_) : events(events_), manager(manager_) {}
+
 void Scene::OnEnter()
 {
 }

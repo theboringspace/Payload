@@ -12,6 +12,12 @@ void SceneManager::Replace(std::unique_ptr<Scene> scene)
 {
     pendingQueue_.push_back(PendingOperation(SceneOperation::REPLACE, std::move(scene)));
 }
+void SceneManager::HandleInput()
+{
+    if (sceneStack_.empty()) return;
+
+    sceneStack_.back()->HandleInput();
+}
 void SceneManager::Update(float deltaTime)
 {
     for (size_t

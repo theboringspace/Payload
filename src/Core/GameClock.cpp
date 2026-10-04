@@ -1,4 +1,23 @@
 #include "GameClock.h"
+#include "Events.h"
+
+GameClock::GameClock(EventBus& events_)
+:   events(events_)
+{
+    increaseTimeScaleSubscription = events.Subscribe<IncreaseTimeScale>([this](const IncreaseTimeScale& event)
+        {
+            SetTimeScale(GetTimeScale() + event.increase);
+        });
+    decreaseTimeScaleSubscription = events.Subscribe<DecreaseTimeScale>([this](const DecreaseTimeScale& event)
+        {
+            SetTimeScale(GetTimeScale() - event.decrease);
+
+        });
+    resetTimeScaleSubscription = events.Subscribe<ResetTimeScale>([this](const ResetTimeScale& event)
+        {
+            SetTimeScale(event.timeScale);
+        });
+}
 
 void GameClock::Advance(float realDt)
 {
@@ -38,4 +57,5 @@ float GameClock::RealTime()const
 void GameClock::SetTimeScale(float scale)
 {
     scale_ = scale;
+    events.Enqueue(TimeScaleChanged{ scale });
 }
