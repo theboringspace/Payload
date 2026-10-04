@@ -26,6 +26,8 @@ class GameClock
 public:
     GameClock(EventBus& events_);
 
+    GameClock(const GameClock&) = delete;
+
     /**
      * FUNCTION Advance
      * --
