@@ -22,6 +22,7 @@ public:
     void OnPause() override;
     void OnResume() override;
 
+    void HandleInput() override;
     void Update(float deltaTime) override;
     void Draw() override;
 

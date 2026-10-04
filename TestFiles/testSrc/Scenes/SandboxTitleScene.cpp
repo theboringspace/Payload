@@ -24,12 +24,16 @@ void SandboxTitleScene::OnResume()
 {
 }
 
-void SandboxTitleScene::Update(float deltaTime)
+void SandboxTitleScene::HandleInput()
 {
     if (startButton.isClicked())
     {
         manager.Replace(std::make_unique<SceneSelectionScene>(events, manager));
     }
+}
+void SandboxTitleScene::Update(float deltaTime)
+{
+
 }
 void SandboxTitleScene::Draw()
 {

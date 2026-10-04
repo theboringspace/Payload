@@ -52,9 +52,9 @@ public:
         std::vector<std::function<void()>> queueLocal{ std::move(queue) };
         queue.clear();
 
-        for (auto& event : queueLocal)
+        for (auto& deliver : queueLocal)
         {
-            event();
+            deliver();
         }
     }
 

@@ -23,12 +23,16 @@ void SceneDemoScene::OnResume()
 {
 }
 
-void SceneDemoScene::Update(float deltaTime)
+void SceneDemoScene::HandleInput()
 {
     if (backButton.isClicked())
     {
         manager.Replace(std::make_unique<SceneSelectionScene>(events, manager));
     }
+}
+void SceneDemoScene::Update(float deltaTime)
+{
+
 }
 void SceneDemoScene::Draw()
 {

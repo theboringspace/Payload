@@ -38,6 +38,12 @@ public:
      */
     void Replace(std::unique_ptr<Scene> scene);
     /**
+     * FUNCTION HandleInput
+     * --
+     * Passes input handling to the top scene on sceneStack_ only.
+     */
+    void HandleInput();
+    /**
      * FUNCTION Update
      * --
      * Updates scenes in sceneStack_ from the top, going down until a scene

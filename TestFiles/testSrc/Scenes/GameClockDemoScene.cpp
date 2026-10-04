@@ -33,10 +33,8 @@ void GameClockDemoScene::OnResume()
 {
 }
 
-void GameClockDemoScene::Update(float deltaTime)
+void GameClockDemoScene::HandleInput()
 {
-    square.Update(deltaTime);
-
     if (backButton.isClicked())
     {
         manager.Replace(std::make_unique<SceneSelectionScene>(events, manager));
@@ -57,6 +55,12 @@ void GameClockDemoScene::Update(float deltaTime)
     {
         events.Enqueue(DecreaseFPS{ 30 });
     }
+}
+void GameClockDemoScene::Update(float deltaTime)
+{
+    square.Update(deltaTime);
+
+
 }
 void GameClockDemoScene::Draw()
 {

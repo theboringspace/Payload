@@ -52,7 +52,7 @@ int main()
         dt = std::min(dt, 0.25f);
 
         // Input
-
+        scenes.HandleInput();
 
         // Update
         clock.Advance(dt);

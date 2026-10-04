@@ -28,7 +28,7 @@ void SceneSelectionScene::OnResume()
 
 }
 
-void SceneSelectionScene::Update(float deltaTime)
+void SceneSelectionScene::HandleInput()
 {
     if (gameClockDemoButton.isClicked())
     {
@@ -46,6 +46,10 @@ void SceneSelectionScene::Update(float deltaTime)
     {
         manager.Replace(std::make_unique<SandboxTitleScene>(events, manager));
     }
+}
+void SceneSelectionScene::Update(float deltaTime)
+{
+
 
 }
 void SceneSelectionScene::Draw()
