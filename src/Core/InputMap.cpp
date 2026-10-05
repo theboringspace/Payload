@@ -44,6 +44,26 @@ bool InputMap::IsPressed(Action action)const
     return false;
 }
 
+bool InputMap::IsReleased(Action action)const
+{
+    auto found = bindings.find(action);
+    if (found == bindings.end())
+    {
+        return false;
+    }
+
+    for (auto it = found->second.begin(); it != found->second.end(); ++it)
+    {
+        if(IsKeyReleased(*it))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
 void InputMap::Clear()
 {
     bindings.clear();

@@ -27,6 +27,7 @@ public:
     void Bind(Action action, KeyboardKey key);
     bool IsDown(Action action)const;
     bool IsPressed(Action action)const;
+    bool IsReleased(Action action)const;
     void Clear();
 
 private:

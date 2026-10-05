@@ -36,10 +36,16 @@ private:
     Button backButton;
 
     Vector2 position{ WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f };
-    Vector2 velocity{0, 0};
+    Vector2 origin{ SIZE.x / 2, SIZE.y / 2 };
+    Vector2 velocity{ 0, 0 };
+    float direction{ 0.0f }; // Radians
 
     static constexpr Vector2 SIZE{ 70, 70 };
-    static constexpr float SPEED{ 400.0f };
+    static constexpr float ADD_SPEED{ 100.0f };
+    static constexpr float START_SPEED{ 10.0f };
+    static constexpr float MAX_SPEED{ 300.0f };
+
+    Rectangle square{ position.x + SIZE.x / 2, position.y + SIZE.y / 2, SIZE.x, SIZE.y};
 
     InputMap input;
 };
