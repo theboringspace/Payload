@@ -14,6 +14,37 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type" FORCE)
 endif()
 
+option(ENABLE_SANITIZERS "Build with AddressSanitizer / UndefinedBehaviorSanitizer" OFF)
+
+# ---------------------------------------------------------------------------
+# Sanitizers (configure with -DENABLE_SANITIZERS=ON)
+#   MSVC        -> AddressSanitizer
+#   MinGW GCC   -> UBSan in trap mode only (MinGW ships no ASan/UBSan runtime)
+#   GCC / Clang -> AddressSanitizer + UndefinedBehaviorSanitizer
+# ---------------------------------------------------------------------------
+function(payload_enable_sanitizers target)
+    if(NOT ENABLE_SANITIZERS)
+        return()
+    endif()
+
+    if(MSVC)
+        target_compile_options(${target} PRIVATE /fsanitize=address /Zi)
+        target_link_options(${target} PRIVATE /INCREMENTAL:NO)
+    elseif(MINGW AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        target_compile_options(${target} PRIVATE
+            -fsanitize=undefined -fsanitize-undefined-trap-on-error -fno-omit-frame-pointer)
+    else()
+        target_compile_options(${target} PRIVATE
+            -fsanitize=address,undefined -fno-omit-frame-pointer)
+        target_link_options(${target} PRIVATE -fsanitize=address,undefined)
+    endif()
+endfunction()
+
+if(ENABLE_SANITIZERS AND MINGW AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    message(WARNING "MinGW GCC has no ASan runtime; only UBSan (trap mode) is enabled. "
+                    "Use MSYS2 clang64 or MSVC for AddressSanitizer.")
+endif()
+
 # ---------------------------------------------------------------------------
 # Raylib: use an installed copy if available (e.g. MSYS2 mingw-w64-ucrt-x86_64-raylib),
 # otherwise download and build it from source.
@@ -89,6 +120,8 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMENT "Copying assets"
 )
 
+payload_enable_sanitizers(${PROJECT_NAME})
+
 
 # ---------------------------------------------------------------------------
 # Sandbox Executable
@@ -115,3 +148,4 @@ list(REMOVE_DUPLICATES SANDBOX_INCLUDE_DIRS)
 
 target_include_directories(Sandbox PRIVATE ${SANDBOX_INCLUDE_DIRS})
 target_link_libraries(Sandbox PRIVATE raylib)
+payload_enable_sanitizers(Sandbox)
