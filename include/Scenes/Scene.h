@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "EventBus.h"
 
 class SceneManager;
@@ -32,6 +34,9 @@ public:
     virtual bool IsTransparent()const;
     /// Scenes below aren't updated.
     virtual bool BlocksUpdate()const;
+
+    /// Name of the scene, for debugging (e.g. the Sandbox debug overlay).
+    virtual std::string GetName()const = 0;
 
 protected:
     EventBus&       events;

@@ -85,3 +85,7 @@ bool GameClockDemoScene::BlocksUpdate()const
 {
     return true;
 }
+std::string GameClockDemoScene::GetName()const
+{
+    return "GameClockDemoScene";
+}

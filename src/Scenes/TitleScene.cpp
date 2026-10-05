@@ -44,3 +44,7 @@ bool TitleScene::BlocksUpdate()const
 {
     return Scene::BlocksUpdate();
 }
+std::string TitleScene::GetName()const
+{
+    return "TitleScene";
+}

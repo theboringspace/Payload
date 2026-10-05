@@ -52,3 +52,7 @@ bool SandboxTitleScene::BlocksUpdate()const
 {
     return true;
 }
+std::string SandboxTitleScene::GetName()const
+{
+    return "SandboxTitleScene";
+}

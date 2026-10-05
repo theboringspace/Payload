@@ -150,3 +150,7 @@ bool TestInputScene::BlocksUpdate()const
 {
     return true;
 }
+std::string TestInputScene::GetName()const
+{
+    return "TestInputScene";
+}

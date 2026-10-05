@@ -49,3 +49,7 @@ bool SceneDemoScene::BlocksUpdate()const
 {
     return true;
 }
+std::string SceneDemoScene::GetName()const
+{
+    return "SceneDemoScene";
+}

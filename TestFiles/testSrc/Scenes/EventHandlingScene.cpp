@@ -49,3 +49,7 @@ bool EventHandlingScene::BlocksUpdate()const
 {
     return true;
 }
+std::string EventHandlingScene::GetName()const
+{
+    return "EventHandlingScene";
+}

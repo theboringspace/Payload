@@ -28,6 +28,7 @@ public:
 
     bool IsTransparent()const override;
     bool BlocksUpdate()const override;
+    std::string GetName()const override;
 
 private:
     /// Draws one row of the action table: name, bound keys, and whether it's held this frame.

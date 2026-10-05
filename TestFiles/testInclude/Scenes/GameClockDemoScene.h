@@ -30,6 +30,7 @@ public:
 
     bool IsTransparent()const override;
     bool BlocksUpdate()const override;
+    std::string GetName()const override;
 
 private:
     float shownTimeScale{ 1.0f };

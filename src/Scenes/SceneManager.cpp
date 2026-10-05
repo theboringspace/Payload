@@ -98,3 +98,14 @@ bool SceneManager::Empty() const
 {
     return sceneStack_.empty();
 }
+std::vector<std::string> SceneManager::GetSceneNames() const
+{
+    std::vector<std::string> names;
+
+    for (const auto& scene : sceneStack_)
+    {
+        names.push_back(scene->GetName());
+    }
+
+    return names;
+}

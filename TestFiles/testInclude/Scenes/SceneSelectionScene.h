@@ -23,6 +23,7 @@ public:
 
     bool IsTransparent()const override;
     bool BlocksUpdate()const override;
+    std::string GetName()const override;
 private:
     Button gameClockDemoButton {10, 100, 300, 35, "Game Clock Demo", 25};
     Button sceneDemoButton     {10, 200, 300, 35, "Scene Demo", 25};

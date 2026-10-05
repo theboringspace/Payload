@@ -2,6 +2,7 @@
 
 #include <raylib.h>
 #include <memory>
+#include <string>
 #include <vector>
 #include "Scene.h"
 
@@ -75,6 +76,13 @@ public:
      * Returns true if there are no scenes in sceneStack_. False, otherwise.
      */
     bool Empty() const;
+    /**
+     * FUNCTION GetSceneNames
+     * --
+     * Returns the GetName() of every scene in sceneStack_, from the bottom
+     * to the top. For debugging only.
+     */
+    std::vector<std::string> GetSceneNames() const;
 private:
     /// Active scenes, owned by the scene manager. back() is the top scene.
     std::vector<std::unique_ptr<Scene>> sceneStack_;

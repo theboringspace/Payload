@@ -76,3 +76,7 @@ bool SceneSelectionScene::BlocksUpdate()const
 {
     return true;
 }
+std::string SceneSelectionScene::GetName()const
+{
+    return "SceneSelectionScene";
+}
