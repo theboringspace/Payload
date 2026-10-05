@@ -4,6 +4,7 @@
 #include "SceneDemoScene.h"
 #include "EventHandlingScene.h"
 #include "SandboxTitleScene.h"
+#include "TestInputScene.h"
 
 SceneSelectionScene::SceneSelectionScene(EventBus& events_, SceneManager& manager_)
 :   Scene(events_, manager_)
@@ -42,6 +43,10 @@ void SceneSelectionScene::HandleInput()
     {
         manager.Replace(std::make_unique<EventHandlingScene>(events, manager));
     }
+    else if (inputDemoButton.isClicked())
+    {
+        manager.Replace(std::make_unique<TestInputScene>(events, manager));
+    }
     else if (titleButton.isClicked())
     {
         manager.Replace(std::make_unique<SandboxTitleScene>(events, manager));
@@ -59,6 +64,7 @@ void SceneSelectionScene::Draw()
     gameClockDemoButton.Draw();
     sceneDemoButton.Draw();
     EventHandlingButton.Draw();
+    inputDemoButton.Draw();
     titleButton.Draw();
 }
 
