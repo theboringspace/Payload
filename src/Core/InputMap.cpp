@@ -43,3 +43,8 @@ bool InputMap::IsPressed(Action action)const
 
     return false;
 }
+
+void InputMap::Clear()
+{
+    bindings.clear();
+}

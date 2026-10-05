@@ -27,6 +27,7 @@ public:
     void Bind(Action action, KeyboardKey key);
     bool IsDown(Action action)const;
     bool IsPressed(Action action)const;
+    void Clear();
 
 private:
     std::unordered_map<Action, std::vector<KeyboardKey>> bindings;
