@@ -2,9 +2,9 @@
 #include "Constants.h"
 #include "InputMap.h"
 #include "SceneSelectionScene.h"
-#include <math.h>
 
 #include <raylib.h>
+#include <cmath>
 
 PlayerMovementScene::PlayerMovementScene(EventBus& events_, SceneManager& manager_)
 :   Scene(events_, manager_),
@@ -18,6 +18,7 @@ void PlayerMovementScene::OnEnter()
     input.Bind(Action::MOVE_DOWN, KEY_S);
     input.Bind(Action::MOVE_LEFT, KEY_A);
     input.Bind(Action::MOVE_RIGHT, KEY_D);
+    input.Bind(Action::SLOW_DOWN, KEY_SPACE);
 
 }
 void PlayerMovementScene::OnExit()
@@ -37,71 +38,79 @@ void PlayerMovementScene::HandleInput()
     {
         manager.Replace(std::make_unique<SceneSelectionScene>(events, manager));
     }
-    // Held actions: build a direction from the four axes. Diagonals fall out of this for free.
-    Vector2 moveDirection{ 0.0f, 0.0f };
-    float acceleration{ 25.0f };
-    if (input.IsDown(Action::MOVE_UP))
-    {
-        moveDirection.y -= acceleration;
-    }
-    if (input.IsReleased(Action::MOVE_UP))
-    {
-        moveDirection.y = 0;
-    }
-    if (input.IsDown(Action::MOVE_DOWN))
-    {
-        moveDirection.y += acceleration;
-    }
-    if (input.IsReleased(Action::MOVE_DOWN))
-    {
-        moveDirection.y = 0;
-    }
-    if (input.IsDown(Action::MOVE_LEFT))
-    {
-        moveDirection.x -= acceleration;
-    }
-    if (input.IsReleased(Action::MOVE_LEFT))
-    {
-        moveDirection.x = 0;
-    }
-    if (input.IsDown(Action::MOVE_RIGHT))
-    {
-        moveDirection.x += acceleration;
-    }
-    if (input.IsReleased(Action::MOVE_RIGHT))
-    {
-        moveDirection.x = 0;
-    }
+    // Only read what the player wants here. Velocity is changed in Update(), at a fixed rate.
+    // Tank controls: MOVE_UP/DOWN are forward/reverse thrust, MOVE_LEFT/RIGHT turn.
+    // Holding both keys of a pair cancels out to 0.
+    thrustInput = 0.0f;
+    if (input.IsDown(Action::MOVE_UP))   thrustInput += 1.0f;
+    if (input.IsDown(Action::MOVE_DOWN)) thrustInput -= 1.0f;
 
-    // Normalize so diagonals aren't faster than straight movement.
-    float length{ std::sqrt(moveDirection.x * moveDirection.x + moveDirection.y * moveDirection.y) };
-    if (length > 0.0f)
-    {
-        moveDirection.x /= length;
-        moveDirection.y /= length;
-    }
+    turnInput = 0.0f;
+    if (input.IsDown(Action::MOVE_LEFT))  turnInput -= 1.0f;
+    if (input.IsDown(Action::MOVE_RIGHT)) turnInput += 1.0f;
 
-    if (length > 0.0f)
-    {
-        direction = atan2f(moveDirection.y, moveDirection.x) * RAD2DEG;
-    }
-
-    velocity = {velocity.x + moveDirection.x, velocity.y + moveDirection.y};
-
+    // "Is it held right now?" every frame, so it can't get stuck on.
+    braking = input.IsDown(Action::SLOW_DOWN);
 }
 void PlayerMovementScene::Update(float deltaTime)
 {
-    square.x += velocity.x * START_SPEED * deltaTime;
-    square.y += velocity.y * START_SPEED * deltaTime;
+    // 1. Turn. Screen y points down, so a bigger angle turns clockwise (right).
+    direction += turnInput * TURN_SPEED * deltaTime;
+    // Keep it in [0, 360) so it doesn't grow forever.
+    direction = std::fmod(direction, 360.0f);
+    if (direction < 0.0f)
+    {
+        direction += 360.0f;
+    }
 
-    // Keep the square on screen.
-    // square.x/y is the center (origin is SIZE/2), and the square is rotated,
-    // so clamp using the half-extents of its rotated bounding box.
-    float rad{ direction * DEG2RAD };
-    float c{ std::fabs(std::cos(rad)) };
-    float s{ std::fabs(std::sin(rad)) };
-    float halfW{ (SIZE.x * c + SIZE.y * s) / 2.0f };
-    float halfH{ (SIZE.x * s + SIZE.y * c) / 2.0f };
+    // Thrust along the facing. Reverse is weaker than forward.
+    if (thrustInput != 0.0f)
+    {
+        float rad{ direction * DEG2RAD };
+        Vector2 forward{ std::cos(rad), std::sin(rad) };
+        float thrust{ thrustInput > 0.0f ? ACCELERATION : -REVERSE_ACCELERATION };
+
+        velocity.x += forward.x * thrust * deltaTime;
+        velocity.y += forward.y * thrust * deltaTime;
+    }
+
+    // 2. Brake: slow down along the direction of travel, never past zero.
+    brakingPower = { 0.0f, 0.0f };
+    float speed{ std::sqrt(velocity.x * velocity.x + velocity.y * velocity.y) };
+    if (braking && speed > 0.0f)
+    {
+        float brakeAmount{ BRAKE_STRENGTH * deltaTime };
+        if (brakeAmount >= speed)
+        {
+            // Close enough: stop completely, both axes at once.
+            brakingPower = velocity;
+            velocity = { 0.0f, 0.0f };
+        }
+        else
+        {
+            // velocity / speed is the direction of travel, length 1.
+            brakingPower = { velocity.x / speed * brakeAmount, velocity.y / speed * brakeAmount };
+            velocity.x -= brakingPower.x;
+            velocity.y -= brakingPower.y;
+        }
+    }
+
+    // 3. Speed cap.
+    speed = std::sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
+    if (speed > MAX_SPEED)
+    {
+        velocity.x = (velocity.x / speed) * MAX_SPEED;
+        velocity.y = (velocity.y / speed) * MAX_SPEED;
+    }
+
+    // 4. Move.
+    square.x += velocity.x * PIXELS * deltaTime;
+    square.y += velocity.y * PIXELS * deltaTime;
+
+
+    // Keep the square on screen. square.x/y is the center, so stop half a size from each edge.
+    float halfW{ SIZE.x / 2.0f };
+    float halfH{ SIZE.y / 2.0f };
 
     if (square.x < halfW)
     {
@@ -124,6 +133,7 @@ void PlayerMovementScene::Update(float deltaTime)
         velocity.y = 0.0f;
     }
 }
+
 void PlayerMovementScene::Draw()
 {
     ClearBackground(BLACK);
@@ -148,9 +158,13 @@ void PlayerMovementScene::Draw()
                3.5,
                SKYBLUE);
 
-
-
-
+    // Position, velocity, and braking readout, under the back button in the top left corner.
+    DrawText(TextFormat("Position X: %.1f", square.x),       10, 95,  25, RAYWHITE);
+    DrawText(TextFormat("Position Y: %.1f", square.y),       10, 130, 25, RAYWHITE);
+    DrawText(TextFormat("Velocity X: %.2f", velocity.x),     10, 165, 25, RAYWHITE);
+    DrawText(TextFormat("Velocity Y: %.2f", velocity.y),     10, 200, 25, RAYWHITE);
+    DrawText(TextFormat("Braking X: %.2f", brakingPower.x),  10, 235, 25, RAYWHITE);
+    DrawText(TextFormat("Braking Y: %.2f", brakingPower.y),  10, 270, 25, RAYWHITE);
 };
 
 bool PlayerMovementScene::IsTransparent()const

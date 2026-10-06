@@ -13,6 +13,7 @@ enum class Action
     MOVE_DOWN,
     MOVE_LEFT,
     MOVE_RIGHT,
+    SLOW_DOWN,
 
     // Gameplay Actions
     PAUSE,

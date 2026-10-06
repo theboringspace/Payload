@@ -38,14 +38,22 @@ private:
     Vector2 position{ WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f };
     Vector2 origin{ SIZE.x / 2, SIZE.y / 2 };
     Vector2 velocity{ 0, 0 };
-    float direction{ 0.0f }; // Radians
+    // Read in HandleInput(), applied in Update()
+    float thrustInput{ 0.0f }; // +1 forward (W), -1 reverse (S), 0 none
+    float turnInput{ 0.0f };   // -1 left (A), +1 right (D), 0 none
+    float direction{ 270.0f }; // Degrees, starts facing up
+    Vector2 brakingPower{ 0, 0 }; // How much braking removed on the last Update(), for the readout
+    bool braking{ false };
 
     static constexpr Vector2 SIZE{ 70, 70 };
-    static constexpr float ADD_SPEED{ 100.0f };
-    static constexpr float START_SPEED{ 10.0f };
-    static constexpr float MAX_SPEED{ 300.0f };
+    static constexpr float ACCELERATION{ 60.0f };         // Velocity gained per second, forward thrust
+    static constexpr float REVERSE_ACCELERATION{ 30.0f }; // Velocity gained per second, reverse thrust (weaker)
+    static constexpr float TURN_SPEED{ 180.0f };          // Degrees per second
+    static constexpr float BRAKE_STRENGTH{ 60.0f }; // Velocity lost per second while braking
+    static constexpr float PIXELS{ 10.0f };
+    static constexpr float MAX_SPEED{ 100.0f };
 
-    Rectangle square{ position.x + SIZE.x / 2, position.y + SIZE.y / 2, SIZE.x, SIZE.y};
+    Rectangle square{ position.x, position.y, SIZE.x, SIZE.y};
 
     InputMap input;
 };
