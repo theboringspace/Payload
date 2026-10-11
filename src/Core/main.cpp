@@ -5,13 +5,18 @@
 #include <raylib.h>
 
 // Test Includes
+#include "Constants.h"
 #include "GameClock.h"
 #include "TitleScene.h"
 #include "Scene.h"
+#include "VirtualScreen.h"
 
 int main()
 {
-    InitWindow(1920, 1080, "Payload");
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+    InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Payload");
+    MaximizeWindow();
+    VirtualScreen screen;
     SetTargetFPS(120);
     GameClock clock;
 
@@ -34,11 +39,11 @@ int main()
 
 
         // DRAW
-        BeginDrawing();
+        screen.Begin();
 
         scene->Draw();
 
-        EndDrawing();
+        screen.End();
     }
 
     scene->OnExit();

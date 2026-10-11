@@ -10,7 +10,9 @@
 #include "SceneManager.h"
 #include "SandboxTitleScene.h"
 
+#include "Constants.h"
 #include "GameClock.h"
+#include "VirtualScreen.h"
 
 #include "EventBus.h"
 #include "Events.h"
@@ -33,7 +35,7 @@ void DrawDebugOverlay(const std::vector<std::string>& lines)
 
     int width{ widest + PADDING * 2 };
     int height{ static_cast<int>(lines.size()) * (FONT_SIZE + LINE_SPACING) - LINE_SPACING + PADDING * 2 };
-    int x{ GetScreenWidth() - width - MARGIN };
+    int x{ WINDOW_WIDTH - width - MARGIN };
     int y{ MARGIN };
 
     DrawRectangle(x, y, width, height, Fade(BLACK, 0.75f));
@@ -48,7 +50,10 @@ void DrawDebugOverlay(const std::vector<std::string>& lines)
 
 int main()
 {
-    InitWindow(1920, 1080, "Payload Sandbox");
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+    InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Payload Sandbox");
+    MaximizeWindow();
+    VirtualScreen screen;
     int targetFPS{ 60 };
     SetTargetFPS(targetFPS);
 
@@ -104,7 +109,7 @@ int main()
 
 
         // Draw
-        BeginDrawing();
+        screen.Begin();
 
         scenes.Draw();
 
@@ -127,7 +132,7 @@ int main()
             DrawDebugOverlay(debugLines);
         }
 
-        EndDrawing();
+        screen.End();
 
         // End of Frame
         scenes.ApplyPending();

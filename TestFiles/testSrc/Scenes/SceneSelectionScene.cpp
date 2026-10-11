@@ -6,6 +6,8 @@
 #include "SandboxTitleScene.h"
 #include "TestInputScene.h"
 #include "PlayerMovementScene.h"
+#include "GameplayTestScene.h"
+#include "EntitySimulationScene.h"
 
 SceneSelectionScene::SceneSelectionScene(EventBus& events_, SceneManager& manager_)
 :   Scene(events_, manager_)
@@ -52,6 +54,14 @@ void SceneSelectionScene::HandleInput()
     {
         manager.Replace(std::make_unique<PlayerMovementScene>(events, manager));
     }
+    else if (gameplayTestButton.isClicked())
+    {
+        manager.Replace(std::make_unique<GameplayTestScene>(events, manager));
+    }
+    else if (entitySimButton.isClicked())
+    {
+        manager.Replace(std::make_unique<EntitySimulationScene>(events, manager));
+    }
     else if (titleButton.isClicked())
     {
         manager.Replace(std::make_unique<SandboxTitleScene>(events, manager));
@@ -71,6 +81,8 @@ void SceneSelectionScene::Draw()
     EventHandlingButton.Draw();
     inputDemoButton.Draw();
     playerMovementButton.Draw();
+    gameplayTestButton.Draw();
+    entitySimButton.Draw();
     titleButton.Draw();
 }
 

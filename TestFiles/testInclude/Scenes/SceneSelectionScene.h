@@ -30,6 +30,8 @@ private:
     Button EventHandlingButton {10, 300, 300, 35, "Event Handling Demo", 25};
     Button inputDemoButton     {10, 400, 300, 35, "Input Map Demo", 25};
     Button playerMovementButton{10, 500, 300, 35, "Player Movement Demo", 25};
+    Button gameplayTestButton  {10, 600, 300, 35, "Gameplay Test", 25};
+    Button entitySimButton     {10, 700, 300, 35, "Entity Simulation", 25};
 
     Button titleButton {(WINDOW_WIDTH - 300) / 2.0f, WINDOW_HEIGHT - 150, 300, 35, "Return to Title", 25};
 };
