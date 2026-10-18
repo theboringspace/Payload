@@ -1,14 +1,18 @@
 #include "PlayerShip.h"
+#include "Events.h"
 
 #include <cmath>
 
-PlayerShip::PlayerShip(float size_)
-:   size(size_)
+PlayerShip::PlayerShip(EventBus& events_, float size_)
+:   events(events_), size(size_)
 {
 }
 
 void PlayerShip::HandleInput(const InputMap& input)
 {
+    /**
+     * MOVEMENT
+     */
     // Holding both keys of a pair cancels out to 0.
     thrustInput = 0.0f;
     if (input.IsDown(Action::MOVE_UP))   thrustInput += 1.0f;
@@ -20,6 +24,11 @@ void PlayerShip::HandleInput(const InputMap& input)
 
     // "Is it held right now?" every frame, so it can't get stuck on.
     braking = input.IsDown(Action::SLOW_DOWN);
+
+    /**
+     * ATTACKS
+     */
+    if (input.IsPressed(Action::PLACE_TURRET)) events.Enqueue(SpawnTurret{});
 }
 
 void PlayerShip::Update(float deltaTime)

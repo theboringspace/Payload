@@ -1,15 +1,22 @@
 #include "Game.h"
+#include "Events.h"
 
 #include <algorithm>
 #include <utility>
 
-Game::Game()
+Game::Game(EventBus& events_)
+:   events(events_)
 {
     // One turret splits the stream mid-screen, two flank the goal.
     // Small changes to TURRET_RANGE swing the balance a lot (225 lets ~75% through, 250 ~20%).
     turrets.push_back(Turret({ 700.0f, 540.0f }, TURRET_RANGE));
     turrets.push_back(Turret({ 1250.0f, 250.0f }, TURRET_RANGE));
     turrets.push_back(Turret({ 1250.0f, 830.0f }, TURRET_RANGE));
+
+    spawnTurret = events.Subscribe<SpawnTurret>([this](const SpawnTurret& event)
+        {
+            turrets.push_back(Turret( {player.GetPosition().x, player.GetPosition().y}, TURRET_RANGE));
+        });
 }
 
 void Game::SpawnEnemy()

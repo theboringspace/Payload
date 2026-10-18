@@ -51,3 +51,8 @@ struct ResetFPS
 {
     int fps{ 60 };
 };
+
+// Player-caused Events
+struct SpawnTurret
+{
+};

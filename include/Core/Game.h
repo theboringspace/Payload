@@ -5,6 +5,7 @@
 
 #include "Constants.h"
 #include "Enemy.h"
+#include "EventBus.h"
 #include "InputMap.h"
 #include "PlayerShip.h"
 #include "Turret.h"
@@ -23,7 +24,7 @@ struct GameResults
 class Game
 {
 public:
-    Game();
+    Game(EventBus& events_);
 
     /// Passes input to the player. Call every frame.
     void HandleInput(const InputMap& input);
@@ -38,9 +39,11 @@ public:
     static constexpr float GOAL_RADIUS{ 50.0f };
 
 private:
+    EventBus& events;
+
     void SpawnEnemy();
 
-    PlayerShip player{ PLAYER_SIZE };
+    PlayerShip player{ events, PLAYER_SIZE };
     std::vector<Turret> turrets;
     std::vector<Enemy> enemies;
     GameResults results;
@@ -57,4 +60,8 @@ private:
     static constexpr int MAX_ENEMY_SPEED{ 600 };
     static constexpr int DEFAULT_ENEMY_HEALTH{ 3 };
     static constexpr int ENEMY_SPAWN_MARGIN{ 20 };       // Keep spawns off the top and bottom edges
+
+
+    // Events
+    EventSubscription spawnTurret;
 };

@@ -22,7 +22,7 @@ class PlayerShip
 {
 public:
     /// size_ is the width and height of the ship, in pixels.
-    explicit PlayerShip(float size_ = DEFAULT_SIZE);
+    explicit PlayerShip(EventBus& events_, float size_ = DEFAULT_SIZE);
 
     /**
      * FUNCTION HandleInput
@@ -52,8 +52,18 @@ public:
     float   GetDirection()const;
 
 private:
+    /**
+     * EVERYTHING ELSE
+     */
+    EventBus& events;
+
+
     Vector2 position{ WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f };
     Vector2 velocity{ 0, 0 };
+
+    /**
+     * MOVEMENT
+     */
     // Read in HandleInput(), applied in Update()
     float thrustInput{ 0.0f }; // +1 forward, -1 reverse, 0 none
     float turnInput{ 0.0f };   // -1 left, +1 right, 0 none
@@ -61,7 +71,6 @@ private:
     Vector2 brakingPower{ 0, 0 }; // How much braking removed on the last Update(), for readouts
     bool braking{ false };
     float size;
-
     static constexpr float DEFAULT_SIZE{ 70.0f };
     static constexpr float ACCELERATION{ 60.0f };         // Velocity gained per second, forward thrust
     static constexpr float REVERSE_ACCELERATION{ 30.0f }; // Velocity gained per second, reverse thrust (weaker)
@@ -69,4 +78,6 @@ private:
     static constexpr float BRAKE_STRENGTH{ 60.0f };       // Velocity lost per second while braking
     static constexpr float PIXELS{ 10.0f };               // Pixels moved per second per unit of velocity
     static constexpr float MAX_SPEED{ 100.0f };
+
+
 };

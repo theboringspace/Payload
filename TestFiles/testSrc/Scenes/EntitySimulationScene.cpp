@@ -9,7 +9,8 @@
 
 EntitySimulationScene::EntitySimulationScene(EventBus& events_, SceneManager& manager_)
 :   Scene(events_, manager_),
-    backButton(10, 10, 300, 75, "Back to Selection", 30)
+    backButton(10, 10, 300, 75, "Back to Selection", 30),
+    game(events_)
 {
     earthDamagedSubscription = events.Subscribe<EarthDamaged>([this](const EarthDamaged& event)
         {
@@ -28,6 +29,7 @@ void EntitySimulationScene::OnEnter()
     input.Bind(Action::MOVE_LEFT, KEY_A);
     input.Bind(Action::MOVE_RIGHT, KEY_D);
     input.Bind(Action::SLOW_DOWN, KEY_SPACE);
+    input.Bind(Action::PLACE_TURRET, KEY_T);
 }
 
 void EntitySimulationScene::OnExit()

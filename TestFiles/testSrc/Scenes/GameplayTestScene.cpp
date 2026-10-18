@@ -5,7 +5,8 @@
 
 GameplayTestScene::GameplayTestScene(EventBus& events_, SceneManager& manager_)
 :   Scene(events_, manager_),
-    backButton(10, 10, 300, 75, "Back to Selection", 30)
+    backButton(10, 10, 300, 75, "Back to Selection", 30),
+    game(events_)
 {
 }
 
