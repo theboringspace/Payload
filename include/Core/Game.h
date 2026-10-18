@@ -38,6 +38,8 @@ public:
 
     static constexpr float GOAL_RADIUS{ 50.0f };
 
+    const PlayerShip& GetPlayer()const;
+
 private:
     EventBus& events;
 

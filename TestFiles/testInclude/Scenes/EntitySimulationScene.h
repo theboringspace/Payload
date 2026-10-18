@@ -33,6 +33,7 @@ private:
     Button backButton;
     Game game;
     InputMap input;
+    Camera2D camera;
 
     int breached{ 0 };
     int killed{ 0 };

@@ -12,6 +12,13 @@ EntitySimulationScene::EntitySimulationScene(EventBus& events_, SceneManager& ma
     backButton(10, 10, 300, 75, "Back to Selection", 30),
     game(events_)
 {
+    camera.target = { 100, 100 };
+    camera.zoom = 1.5f;
+    camera.offset = { WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f };
+    camera.rotation = 0;
+
+
+    // Subscriptions
     earthDamagedSubscription = events.Subscribe<EarthDamaged>([this](const EarthDamaged& event)
         {
             breached += event.amount;
@@ -50,6 +57,7 @@ void EntitySimulationScene::HandleInput()
 void EntitySimulationScene::Update(float deltaTime)
 {
     game.Update(deltaTime);
+    camera.target = game.GetPlayer().GetPosition();
 
     // Game doesn't know about the EventBus, so turn what happened into events here.
     GameResults results{ game.TakeResults() };
@@ -67,7 +75,9 @@ void EntitySimulationScene::Draw()
 {
     ClearBackground(BLACK);
 
+    BeginMode2D(camera);
     game.Draw();
+    EndMode2D();
 
     // Breached count above the goal, kept on screen since the goal hugs the right edge.
     constexpr int FONT_SIZE{ 30 };

@@ -19,6 +19,11 @@ Game::Game(EventBus& events_)
         });
 }
 
+const PlayerShip& Game::GetPlayer()const
+{
+    return player;
+}
+
 void Game::SpawnEnemy()
 {
     Vector2 spawn{ 0.0f, static_cast<float>(GetRandomValue(ENEMY_SPAWN_MARGIN, WINDOW_HEIGHT - ENEMY_SPAWN_MARGIN)) };
