@@ -1,4 +1,4 @@
-``#include "EntitySimulationScene.h"
+#include "EntitySimulationScene.h"
 #include "SceneSelectionScene.h"
 
 #include "Constants.h"

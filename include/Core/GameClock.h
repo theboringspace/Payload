@@ -87,5 +87,4 @@ private:
     EventSubscription increaseTimeScaleSubscription;
     EventSubscription decreaseTimeScaleSubscription;
     EventSubscription resetTimeScaleSubscription;
-
 };
