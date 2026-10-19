@@ -31,12 +31,14 @@ EntitySimulationScene::EntitySimulationScene(EventBus& events_, SceneManager& ma
 
 void EntitySimulationScene::OnEnter()
 {
+    // Input Bindings
     input.Bind(Action::MOVE_UP, KEY_W);
     input.Bind(Action::MOVE_DOWN, KEY_S);
     input.Bind(Action::MOVE_LEFT, KEY_A);
     input.Bind(Action::MOVE_RIGHT, KEY_D);
     input.Bind(Action::SLOW_DOWN, KEY_SPACE);
     input.Bind(Action::PLACE_TURRET, KEY_T);
+    input.Bind(Action::FIRE_PROJECTILE, KEY_P);
 }
 
 void EntitySimulationScene::OnExit()

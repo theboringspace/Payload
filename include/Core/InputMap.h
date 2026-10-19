@@ -20,6 +20,9 @@ enum class Action
     UNPAUSE,
     PLACE_TURRET,
     GACHA,
+
+    // Attacks
+    FIRE_PROJECTILE,
 };
 
 class InputMap

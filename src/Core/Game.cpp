@@ -17,6 +17,10 @@ Game::Game(EventBus& events_)
         {
             turrets.push_back(Turret( {player.GetPosition().x, player.GetPosition().y}, TURRET_RANGE));
         });
+    fireProjectile = events.Subscribe<ProjectileFired>([this](const ProjectileFired& event)
+        {
+            projectiles.push_back(Projectile{event.startingPosition, event.velocity, event.radius});
+        });
 }
 
 const PlayerShip& Game::GetPlayer()const
@@ -48,6 +52,12 @@ void Game::Update(float deltaTime)
         threats.push_back({ turret.GetPosition(), turret.GetRange() * TURRET_THREAT_FACTOR });
     }
     threats.push_back({ player.GetPosition(), PLAYER_THREAT_RADIUS });
+
+    // 2.1 Projectiles
+    for (auto& projectile : projectiles)
+    {
+        projectile.Update(deltaTime);
+    }
 
     // 3. Steer every enemy before any of them move, so they all react to the same snapshot.
     for (auto& enemy : enemies)
@@ -100,6 +110,9 @@ void Game::Draw()const
 
     for (const auto& turret : turrets) turret.Draw();
     for (const auto& enemy : enemies) enemy.Draw();
+    for (const auto& projectile : projectiles) projectile.Draw();
+
+
     player.Draw();
 }
 

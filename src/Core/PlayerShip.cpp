@@ -2,6 +2,7 @@
 #include "Events.h"
 
 #include <cmath>
+#include <raymath.h>
 
 PlayerShip::PlayerShip(EventBus& events_, float size_)
 :   events(events_), size(size_)
@@ -29,6 +30,9 @@ void PlayerShip::HandleInput(const InputMap& input)
      * ATTACKS
      */
     if (input.IsPressed(Action::PLACE_TURRET)) events.Enqueue(SpawnTurret{});
+    if (input.IsPressed(Action::FIRE_PROJECTILE)) events.Enqueue(ProjectileFired{position, {100 * 20 * cos(direction * DEG2RAD), 100 * 20 * sin(direction * DEG2RAD)}, 10});
+
+
 }
 
 void PlayerShip::Update(float deltaTime)

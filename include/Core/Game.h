@@ -9,6 +9,7 @@
 #include "InputMap.h"
 #include "PlayerShip.h"
 #include "Turret.h"
+#include "Projectile.h"
 
 /// What happened since the last TakeResults() call.
 struct GameResults
@@ -48,6 +49,7 @@ private:
     PlayerShip player{ events, PLAYER_SIZE };
     std::vector<Turret> turrets;
     std::vector<Enemy> enemies;
+    std::vector<Projectile> projectiles;
     GameResults results;
     float spawnTimer{ 0.0f };
 
@@ -66,4 +68,5 @@ private:
 
     // Events
     EventSubscription spawnTurret;
+    EventSubscription fireProjectile;
 };

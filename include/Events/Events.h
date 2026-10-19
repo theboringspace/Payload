@@ -56,3 +56,16 @@ struct ResetFPS
 struct SpawnTurret
 {
 };
+
+// Projectiles
+struct ProjectileFired
+{
+    Vector2 startingPosition;
+    Vector2 velocity;
+    float radius;
+};
+
+struct HitByProjectile
+{
+    float damage;
+};
