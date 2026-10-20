@@ -4,6 +4,8 @@
 #include <raylib.h>
 #include <cmath>
 
+/// White square that slides left and right, bouncing off the screen edges.
+/// Used by GameClockDemoScene to show time scaling.
 struct Square
 {
     float side_;

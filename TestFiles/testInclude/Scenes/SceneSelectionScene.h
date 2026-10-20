@@ -7,6 +7,7 @@
 #include "EventBus.h"
 #include "SceneManager.h"
 
+/// Sandbox menu. One button per test scene, plus one back to the title.
 class SceneSelectionScene : public Scene
 {
 public:

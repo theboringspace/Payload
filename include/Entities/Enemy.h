@@ -17,6 +17,7 @@ struct Threat
 class Enemy : public Entity
 {
 public:
+    /// maxSpeed_ is in pixels per second. goalRadius_ is how close counts as reaching the goal.
     Enemy(Vector2 position_, Vector2 goal_, float goalRadius_, float maxSpeed_, int maxHealth);
 
     /// Works out this frame's steering from threats and other enemies.
@@ -28,8 +29,10 @@ public:
     void Update(float deltaTime) override;
     void Draw()const override;
 
+    /// Deactivates the enemy once health hits 0.
     void TakeDamage(int amount);
 
+    /// Same as IsActive().
     bool IsAlive()const;
     /// True if this enemy was deactivated by reaching the goal, not by dying.
     bool ReachedGoal()const;

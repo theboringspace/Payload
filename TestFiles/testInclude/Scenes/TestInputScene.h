@@ -10,6 +10,8 @@
 #include "Button.h"
 #include "InputMap.h"
 
+/// InputMap demo. Shows every bound action and whether it's held, moves a square
+/// with WASD/arrows, and counts presses so missed or doubled presses are visible.
 class TestInputScene : public Scene
 {
 public:

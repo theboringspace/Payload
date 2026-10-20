@@ -6,6 +6,15 @@
 
 class SceneManager;
 
+/**
+ * CLASS Scene
+ * --
+ * Base class for every screen (title, menus, gameplay, ...). Scenes live on
+ * SceneManager's stack, and can push/pop/replace scenes through manager.
+ *
+ * By default a scene is opaque and blocks updates to scenes below it.
+ * Lifecycle hooks (OnEnter, OnExit, OnPause, OnResume) do nothing unless overridden.
+ */
 class Scene
 {
 public:

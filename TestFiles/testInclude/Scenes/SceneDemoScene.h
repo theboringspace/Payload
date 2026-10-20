@@ -7,6 +7,7 @@
 
 #include "Button.h"
 
+/// Placeholder for a scene stack demo. Only has a back button for now.
 class SceneDemoScene : public Scene
 {
 public:

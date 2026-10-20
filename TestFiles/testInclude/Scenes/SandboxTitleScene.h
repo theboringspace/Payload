@@ -7,6 +7,7 @@
 
 #include "Button.h"
 
+/// First scene in the Sandbox. The start button goes to SceneSelectionScene.
 class SandboxTitleScene : public Scene
 {
 public:

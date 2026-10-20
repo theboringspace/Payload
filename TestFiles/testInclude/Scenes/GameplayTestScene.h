@@ -8,6 +8,7 @@
 
 #include "Game.h"
 
+/// Runs Game with no player input, just turrets vs. enemies.
 class GameplayTestScene : public Scene
 {
 public:

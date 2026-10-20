@@ -28,6 +28,9 @@ public:
      * FUNCTION HandleInput
      * --
      * Only reads what the player wants. Velocity is changed in Update(), at a fixed rate.
+     *
+     * PLACE_TURRET enqueues SpawnTurret, FIRE_PROJECTILE enqueues ProjectileFired
+     * from the ship's center along its facing.
      */
     void HandleInput(const InputMap& input);
     /**

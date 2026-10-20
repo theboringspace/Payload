@@ -6,6 +6,7 @@
 struct PlayerDamaged { int health; };
 struct PlayerKills   { int kills;  };
 
+/// Fake player for trying out EventBus. Enqueues an event on damage and on kills.
 class TestPlayer
 {
 public:

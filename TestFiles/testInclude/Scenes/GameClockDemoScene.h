@@ -12,6 +12,8 @@
 
 class EventSubscription;
 
+/// Buttons to raise/lower the time scale and the FPS, with a moving Square
+/// to see the effect. Resets both when entered.
 class GameClockDemoScene : public Scene
 {
 public:

@@ -10,6 +10,8 @@ struct EnemyDied
     int reward;
 };
 
+/// Early single-event prototype of EventBus. Not used anymore.
+/// Its EnemyDied clashes with the one in Events.h, so don't include both.
 class EnemyDiedBus {
 public:
     void Subscribe(std::function<void(const EnemyDied&)> handler)

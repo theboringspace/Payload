@@ -6,9 +6,12 @@
 #include "Entity.h"
 #include "Enemy.h"
 
+/// Stationary tower that hits the closest living enemy in range, then waits
+/// out a cooldown. Shots are instant (no projectile); a line is drawn briefly to show them.
 class Turret : public Entity
 {
 public:
+    /// range_ is in pixels.
     explicit Turret(Vector2 position_, float range_ = DEFAULT_RANGE);
 
     /// Generic per-frame tick: just advances the fire cooldown. Does not
@@ -26,10 +29,10 @@ public:
     static constexpr float DEFAULT_RANGE{ 400.0f };
 
 private:
-    float range;
-    float fireRate;
-    float fireTimer;
-    int damage;
+    float range;     ///< Pixels.
+    float fireRate;  ///< Seconds between shots.
+    float fireTimer; ///< Seconds until it can fire again.
+    int damage;      ///< Damage per shot.
 
     Vector2 shotTarget{ 0.0f, 0.0f }; ///< Where the last shot landed.
     float shotTimer{ 0.0f };          ///< Time left to show the last shot.

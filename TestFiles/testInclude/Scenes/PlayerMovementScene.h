@@ -12,6 +12,8 @@
 
 
 
+/// Standalone prototype of PlayerShip's tank controls (WASD, Space to brake),
+/// with position, velocity, and braking shown on screen.
 class PlayerMovementScene : public Scene
 {
 public:

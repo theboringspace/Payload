@@ -7,6 +7,7 @@
 
 #include "Button.h"
 
+/// Placeholder for an event handling demo. Only has a back button for now.
 class EventHandlingScene : public Scene
 {
 public:

@@ -29,12 +29,16 @@ public:
 
     /// Passes input to the player. Call every frame.
     void HandleInput(const InputMap& input);
+    /// One fixed step: player, projectiles, enemy steering, turrets, enemy movement,
+    /// then records results, removes dead enemies, and spawns new ones.
     void Update(float deltaTime);
+    /// Draws the goal, turrets, enemies, projectiles, then the player on top.
     void Draw()const;
 
     /// Returns everything that happened since the last call, then clears it.
     GameResults TakeResults();
 
+    /// Center of the goal enemies are flying toward.
     Vector2 GetGoal()const;
 
     static constexpr float GOAL_RADIUS{ 50.0f };
@@ -44,6 +48,7 @@ public:
 private:
     EventBus& events;
 
+    /// Spawns one enemy on the left edge at a random height and speed.
     void SpawnEnemy();
 
     PlayerShip player{ events, PLAYER_SIZE };
@@ -67,6 +72,6 @@ private:
 
 
     // Events
-    EventSubscription spawnTurret;
-    EventSubscription fireProjectile;
+    EventSubscription spawnTurret;      ///< SpawnTurret -> adds a turret at the player's position.
+    EventSubscription fireProjectile;   ///< ProjectileFired -> adds a projectile.
 };

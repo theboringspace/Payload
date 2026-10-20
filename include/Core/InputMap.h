@@ -25,13 +25,29 @@ enum class Action
     FIRE_PROJECTILE,
 };
 
+/**
+ * CLASS InputMap
+ * --
+ * Maps Actions to keyboard keys. An Action can have more than one key,
+ * and it counts if ANY of its keys match.
+ *
+ * Typical use:
+ *      input.Bind(Action::MOVE_UP, KEY_W);
+ *      input.Bind(Action::MOVE_UP, KEY_UP);
+ *      if (input.IsDown(Action::MOVE_UP)) { ... }
+ */
 class InputMap
 {
 public:
+    /// Adds a key to an Action. Doesn't remove keys already bound.
     void Bind(Action action, KeyboardKey key);
+    /// True while any bound key is held.
     bool IsDown(Action action)const;
+    /// True only on the frame any bound key was pressed.
     bool IsPressed(Action action)const;
+    /// True only on the frame any bound key was released.
     bool IsReleased(Action action)const;
+    /// Removes every binding.
     void Clear();
 
 private:

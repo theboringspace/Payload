@@ -6,14 +6,25 @@
 #include <vector>
 #include "Scene.h"
 
+/// Kinds of scene changes that can be queued.
 enum class SceneOperation { PUSH, POP, REPLACE };
 
+/// A queued scene change. scene is nullptr for POP.
 struct PendingOperation
 {
     SceneOperation operation;
     std::unique_ptr<Scene> scene;
 };
 
+/**
+ * CLASS SceneManager
+ * --
+ * Owns a stack of scenes. The top scene gets input, and scenes are updated and
+ * drawn depending on BlocksUpdate() and IsTransparent().
+ *
+ * Push/Pop/Replace are queued, not done right away, so a scene can safely
+ * replace itself mid-frame. Call ApplyPending() at the end of every frame.
+ */
 class SceneManager
 {
 public:

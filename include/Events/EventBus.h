@@ -6,7 +6,20 @@
 #include <utility>
 #include "EventSubscription.h"
 
-/// Centralized, type-based Subscribe/Publish Event Bus with queued dispatch.
+/**
+ * CLASS EventBus
+ * --
+ * Centralized, type-based Subscribe/Publish Event Bus with queued dispatch.
+ *
+ * Any struct can be an event (see Events.h). Handlers are picked by the event's type.
+ *
+ * Typical use:
+ *      EventSubscription sub = events.Subscribe<EnemyDied>([](const EnemyDied& e) { ... });
+ *      events.Enqueue(EnemyDied{ position, reward }); // Delivered at the next Dispatch()
+ *      events.Dispatch();                             // Once per frame, after Update
+ *
+ * Keep the EventSubscription alive for as long as the handler should run.
+ */
 class EventBus
 {
 public:
@@ -72,12 +85,15 @@ public:
         }
     }
 
+    /// Saves a copy of the event to be published at the next Dispatch().
     template <typename E>
     void Enqueue(E event)
     {
         queue.push_back([this, event](){ Publish(event); });
     }
 
+    /// Publishes every queued event, in the order they were enqueued.
+    /// Events enqueued while dispatching wait for the next Dispatch().
     void Dispatch()
     {
         std::vector<std::function<void()>> queueLocal{ std::move(queue) };

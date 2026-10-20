@@ -20,6 +20,7 @@ public:
     virtual void Draw()const = 0;
 
     Vector2 GetPosition()const;
+    /// False once Deactivate() has been called.
     bool IsActive()const;
 
 protected:

@@ -5,12 +5,15 @@
 
 #include "Entity.h"
 
+/// Same as Threat in Enemy.h. Don't include both headers in one file.
 struct Threat
 {
     Vector2 position;
     float   radius;
 };
 
+/// Older version of Enemy, without sidestepping or a goal radius.
+/// Not used by Game anymore; Enemy replaced it.
 class FreeRoamEnemy : public Entity
 {
 public:
